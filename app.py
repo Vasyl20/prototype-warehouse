@@ -136,8 +136,8 @@ def delete_product(product_id):
 
 if __name__ == '__main__':
     # ⚠️ Якщо стара база існує — видаляємо, щоб не було конфліктів
-    if os.path.exists(DB_NAME):
-        os.remove(DB_NAME)
-    init_db()
+    # if os.path.exists(DB_NAME):
+    #     os.remove(DB_NAME)
+    # init_db()
     print("🚀 Flask запущено! Відкрий у браузері: http://127.0.0.1:5000")
     app.run(debug=True)

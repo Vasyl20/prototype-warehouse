@@ -200,7 +200,7 @@
 
 
 
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="uk">
 <head>
   <meta charset="UTF-8">
@@ -238,6 +238,142 @@
       </thead>
       <tbody id="tableBody"></tbody>
     </table>
+  </div>
+
+  <!-- Модальне вікно редагування -->
+  <!-- <div class="modal fade" id="editModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">✏️ Редагування товару</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <input id="editId" type="hidden">
+          <div class="mb-2">
+            <label class="form-label">Назва</label>
+            <input id="editName" class="form-control" placeholder="Назва">
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Номер</label>
+            <input id="editNumber" class="form-control" placeholder="Номер">
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Кількість</label>
+            <input id="editQty" class="form-control" placeholder="Кількість" type="number">
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Ціна</label>
+            <input id="editPrice" class="form-control" placeholder="Ціна" type="number" step="0.01">
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Склад</label>
+            <input id="editStorage" class="form-control" placeholder="Склад" disabled>
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Поличка</label>
+            <input id="editShelf" class="form-control" placeholder="Поличка" disabled>
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Стелаж</label>
+            <input id="editRack" class="form-control" placeholder="Стелаж" disabled>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Скасувати</button>
+          <button type="button" class="btn btn-primary" id="saveEditBtn">💾 Зберегти</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/static/script.js"></script>
+
+</body>
+</html>
+ -->
+
+
+
+
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Склад</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="p-4">
+
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h3>📦 Склад</h3>
+      <button class="btn btn-success" id="addBtn">➕ Додати товар</button>
+    </div>
+
+    <table class="table table-bordered align-middle">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Назва</th>
+          <th>Номер</th>
+          <th>Кількість</th>
+          <th>Ціна</th>
+          <th>Склад</th>
+          <th>Поличка</th>
+          <th>Стелаж</th>
+          <th>Дії</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+
+  <!-- Модальне вікно додавання товару -->
+  <div class="modal fade" id="addModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">➕ Додавання товару</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-2">
+            <label class="form-label">Назва *</label>
+            <input id="addName" class="form-control" placeholder="Назва товару">
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Номер</label>
+            <input id="addNumber" class="form-control" placeholder="Номер товару">
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Кількість</label>
+            <input id="addQty" class="form-control" placeholder="0" type="number">
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Ціна</label>
+            <input id="addPrice" class="form-control" placeholder="0.00" type="number" step="0.01">
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Склад *</label>
+            <input id="addStorage" class="form-control" placeholder="Номер складу">
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Поличка *</label>
+            <input id="addShelf" class="form-control" placeholder="Номер полички">
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Стелаж *</label>
+            <input id="addRack" class="form-control" placeholder="Номер стелажу">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Скасувати</button>
+          <button type="button" class="btn btn-success" id="saveAddBtn">💾 Додати</button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Модальне вікно редагування -->
