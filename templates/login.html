@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Вхід - Склад</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .login-card {
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+      padding: 40px;
+      max-width: 400px;
+      width: 100%;
+    }
+    .login-title {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #667eea;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-card">
+    <h2 class="login-title">📦 Система обліку складу</h2>
+    
+    <div id="errorMsg" class="alert alert-danger d-none" role="alert">
+      ❌ Невірний логін або пароль!
+    </div>
+    
+    <form id="loginForm">
+      <div class="mb-3">
+        <label class="form-label">Логін</label>
+        <input type="text" id="username" class="form-control" placeholder="Введіть логін" required>
+      </div>
+      
+      <div class="mb-3">
+        <label class="form-label">Пароль</label>
+        <input type="password" id="password" class="form-control" placeholder="Введіть пароль" required>
+      </div>
+      
+      <button type="submit" class="btn btn-primary w-100">🔐 Увійти</button>
+    </form>
+    
+    <div class="text-center mt-3 text-muted small">
+      <p>Тестовий доступ: <br><strong>адмін / адмін</strong></p>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      
+      try {
+        const res = await fetch('/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+        
+        const data = await res.json();
+        
+        if (res.ok) {
+          window.location.href = '/';
+        } else {
+          document.getElementById('errorMsg').classList.remove('d-none');
+        }
+      } catch (error) {
+        console.error('Помилка входу:', error);
+        alert('Помилка з\'єднання з сервером!');
+      }
+    });
+  </script>
+
+</body>
+</html>
