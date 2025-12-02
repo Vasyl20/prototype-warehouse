@@ -16,11 +16,22 @@ async function loadProducts() {
 // Завантаження операцій
 async function loadOperations() {
   try {
-    const res = await fetch('/operations');
+    const res = await fetch('/api/operations');
+    
+    if (!res.ok) {
+      console.error('Помилка отримання операцій:', res.status);
+      operationsData = [];
+      renderOperationsTable();
+      return;
+    }
+    
     operationsData = await res.json();
+    console.log('Завантажено операцій:', operationsData.length);
     renderOperationsTable();
   } catch (error) {
     console.error('Помилка завантаження операцій:', error);
+    operationsData = [];
+    renderOperationsTable();
   }
 }
 
@@ -65,11 +76,16 @@ function renderOperationsTable() {
     const typeClass = op.type === 'income' ? 'text-success' : 'text-warning';
     const typeText = op.type === 'income' ? '➕ Надходження' : '➖ Відпуск';
     
+    // Формуємо назву товару з номером
+    const productDisplay = op.product_number 
+      ? `${op.product_name} | №${op.product_number}` 
+      : op.product_name;
+    
     row.innerHTML = `
       <td>${op.date}</td>
       <td>${op.time}</td>
       <td class="${typeClass}"><strong>${typeText}</strong></td>
-      <td>${op.product_name}</td>
+      <td>${productDisplay}</td>
       <td>${op.quantity}</td>
     `;
     
@@ -194,6 +210,7 @@ function setTodayDate() {
 
 // Ініціалізація
 window.addEventListener('load', function() {
+  console.log('Завантаження сторінки операцій...');
   setTodayDate();
   
   document.getElementById('addIncomeBtn').addEventListener('click', addIncome);

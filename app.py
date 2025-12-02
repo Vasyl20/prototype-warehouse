@@ -111,6 +111,18 @@ def index():
     return render_template('index.html')
 
 
+@app.route('/stock')
+@login_required
+def stock_page():
+    return render_template('stock.html')
+
+
+@app.route('/operations')
+@login_required
+def operations_page():
+    return render_template('operations.html')
+
+
 # ============ ТОВАРИ ============
 
 @app.route('/products', methods=['GET'])
@@ -202,17 +214,11 @@ def delete_product(product_id):
 
 # ============ ОПЕРАЦІЇ ============
 
-@app.route('/operations')
-@login_required
-def operations_page():
-    return render_template('operations.html')
-
-
-@app.route('/operations', methods=['GET'])
+@app.route('/api/operations', methods=['GET'])
 @login_required
 def get_operations():
     try:
-        ops = query_db('''SELECT o.id, o.type, o.quantity, o.date, o.time, p.name
+        ops = query_db('''SELECT o.id, o.type, o.quantity, o.date, o.time, p.name, p.number
                           FROM operations o
                           JOIN products p ON o.product_id = p.id
                           ORDER BY o.date DESC, o.time DESC
@@ -224,7 +230,8 @@ def get_operations():
                 "quantity": row[2],
                 "date": row[3],
                 "time": row[4],
-                "product_name": row[5]
+                "product_name": row[5],
+                "product_number": row[6]
             }
             for row in ops
         ]
