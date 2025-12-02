@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Дашборд - Склад</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .dashboard-card {
+      transition: transform 0.2s, box-shadow 0.2s;
+      border: none;
+      border-radius: 15px;
+      cursor: pointer;
+    }
+    .dashboard-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    }
+    .card-icon {
+      font-size: 3rem;
+      margin-bottom: 10px;
+    }
+    .quick-action-card {
+      transition: all 0.2s;
+      border-radius: 10px;
+    }
+    .quick-action-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    .recent-operations {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+<body class="p-4">
+
+  <div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h3>📊 Дашборд</h3>
+      <div>
+        <span class="me-3">👤 Адміністратор</span>
+        <a href="/" class="btn btn-primary me-2">📦 Склад</a>
+        <a href="/operations" class="btn btn-info me-2">📋 Операції</a>
+        <a href="/stock" class="btn btn-warning me-2">📊 Залишки</a>
+        <a href="/movement" class="btn btn-secondary me-2">📈 Рух товарів</a>
+        <button class="btn btn-danger" id="logoutBtn">🚪 Вийти</button>
+      </div>
+    </div>
+
+    <!-- Основні показники -->
+    <div class="row mb-4">
+      <div class="col-md-3 mb-3">
+        <div class="card dashboard-card bg-primary text-white">
+          <div class="card-body text-center">
+            <div class="card-icon">📦</div>
+            <h6 class="mb-2">Всього товарів</h6>
+            <h2 id="totalProducts">0</h2>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-3 mb-3">
+        <div class="card dashboard-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+          <div class="card-body text-center">
+            <div class="card-icon">💰</div>
+            <h6 class="mb-2">Загальна вартість</h6>
+            <h2 id="totalValue">0 грн</h2>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-3 mb-3">
+        <div class="card dashboard-card bg-success text-white">
+          <div class="card-body text-center">
+            <div class="card-icon">📋</div>
+            <h6 class="mb-2">Операцій сьогодні</h6>
+            <h2 id="todayOperations">0</h2>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-3 mb-3">
+        <div class="card dashboard-card bg-danger text-white">
+          <div class="card-body text-center">
+            <div class="card-icon">⚠️</div>
+            <h6 class="mb-2">Без залишку</h6>
+            <h2 id="zeroStock">0</h2>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Швидкі дії -->
+    <div class="row mb-4">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header bg-light">
+            <h5 class="mb-0">⚡ Швидкі дії</h5>
+          </div>
+          <div class="card-body">
+            <div class="row g-3">
+              <div class="col-md-3">
+                <a href="/" class="text-decoration-none">
+                  <div class="card quick-action-card bg-success text-white text-center p-3">
+                    <div style="font-size: 2rem;">➕</div>
+                    <div>Додати товар</div>
+                  </div>
+                </a>
+              </div>
+              <div class="col-md-3">
+                <a href="/operations" class="text-decoration-none">
+                  <div class="card quick-action-card bg-info text-white text-center p-3">
+                    <div style="font-size: 2rem;">📥</div>
+                    <div>Надходження</div>
+                  </div>
+                </a>
+              </div>
+              <div class="col-md-3">
+                <a href="/operations" class="text-decoration-none">
+                  <div class="card quick-action-card bg-warning text-dark text-center p-3">
+                    <div style="font-size: 2rem;">📤</div>
+                    <div>Відпуск</div>
+                  </div>
+                </a>
+              </div>
+              <div class="col-md-3">
+                <a href="/stock" class="text-decoration-none">
+                  <div class="card quick-action-card bg-secondary text-white text-center p-3">
+                    <div style="font-size: 2rem;">📊</div>
+                    <div>Залишки</div>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <!-- Останні операції -->
+      <div class="col-md-6 mb-4">
+        <div class="card">
+          <div class="card-header bg-light">
+            <h5 class="mb-0">📋 Останні операції</h5>
+          </div>
+          <div class="card-body recent-operations">
+            <table class="table table-sm">
+              <thead>
+                <tr>
+                  <th>Час</th>
+                  <th>Тип</th>
+                  <th>Товар</th>
+                  <th>К-сть</th>
+                </tr>
+              </thead>
+              <tbody id="recentOperations"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Товари з критичним залишком -->
+      <div class="col-md-6 mb-4">
+        <div class="card">
+          <div class="card-header bg-light">
+            <h5 class="mb-0">⚠️ Критичні залишки</h5>
+          </div>
+          <div class="card-body recent-operations">
+            <table class="table table-sm">
+              <thead>
+                <tr>
+                  <th>Товар</th>
+                  <th>Артикул</th>
+                  <th>Залишок</th>
+                </tr>
+              </thead>
+              <tbody id="criticalStock"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Статистика за період -->
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header bg-light">
+            <h5 class="mb-0">📈 Статистика за сьогодні</h5>
+          </div>
+          <div class="card-body">
+            <div class="row text-center">
+              <div class="col-md-4">
+                <div class="p-3">
+                  <h3 class="text-success" id="todayIncome">0</h3>
+                  <small class="text-muted">Надійшло одиниць</small>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="p-3">
+                  <h3 class="text-warning" id="todayOutcome">0</h3>
+                  <small class="text-muted">Відпущено одиниць</small>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="p-3">
+                  <h3 class="text-info" id="todayBalance">0</h3>
+                  <small class="text-muted">Різниця</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/static/dashboard.js"></script>
+
+</body>
+</html>

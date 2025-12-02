@@ -369,6 +369,21 @@ def get_all_operations():
         return jsonify([])
 
 
+
+
+
+
+# ============ DASHBOARD ============
+@app.route('/dashboard')
+@login_required
+def dashboard_page():
+    return render_template('dashboard.html')
+
+
+
+
+
+
 if __name__ == '__main__':
     if not os.path.exists(DB_NAME):
         init_db()
