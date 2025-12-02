@@ -327,6 +327,46 @@ def add_outcome():
     except Exception as e:
         print(f"Помилка add_outcome: {e}")
         return jsonify({"error": str(e)}), 500
+    
+
+
+
+
+
+
+#  РУХУ ТОВАРІВ ============
+
+@app.route('/movement')
+@login_required
+def movement_page():
+    return render_template('movement.html')
+
+
+# API для отримання ВСІХ операцій (для сторінки руху товарів)
+@app.route('/api/operations/all', methods=['GET'])
+@login_required
+def get_all_operations():
+    try:
+        ops = query_db('''SELECT o.id, o.type, o.quantity, o.date, o.time, p.name, p.number
+                          FROM operations o
+                          JOIN products p ON o.product_id = p.id
+                          ORDER BY o.date DESC, o.time DESC''')
+        result = [
+            {
+                "id": row[0],
+                "type": row[1],
+                "quantity": row[2],
+                "date": row[3],
+                "time": row[4],
+                "product_name": row[5],
+                "product_number": row[6]
+            }
+            for row in ops
+        ]
+        return jsonify(result)
+    except Exception as e:
+        print(f"Помилка get_all_operations: {e}")
+        return jsonify([])
 
 
 if __name__ == '__main__':
