@@ -374,11 +374,68 @@ def get_all_operations():
 
 
 # ============ DASHBOARD ============
+
+# 1. Роут для сторінки дашборду
 @app.route('/dashboard')
 @login_required
 def dashboard_page():
     return render_template('dashboard.html')
 
+
+# 2. API для операцій за сьогодні
+@app.route('/api/operations/today', methods=['GET'])
+@login_required
+def get_today_operations():
+    try:
+        today = datetime.now().strftime('%Y-%m-%d')
+        ops = query_db('''SELECT o.id, o.type, o.quantity, o.date, o.time, p.name, p.number
+                          FROM operations o
+                          JOIN products p ON o.product_id = p.id
+                          WHERE o.date = ?
+                          ORDER BY o.time DESC''', (today,))
+        result = [
+            {
+                "id": row[0],
+                "type": row[1],
+                "quantity": row[2],
+                "date": row[3],
+                "time": row[4],
+                "product_name": row[5],
+                "product_number": row[6]
+            }
+            for row in ops
+        ]
+        return jsonify(result)
+    except Exception as e:
+        print(f"Помилка get_today_operations: {e}")
+        return jsonify([])
+
+
+# # 3. API для всіх операцій (для графіків)
+# @app.route('/api/operations/all', methods=['GET'])
+# @login_required
+# def get_all_operations():
+#     try:
+#         ops = query_db('''SELECT o.id, o.type, o.quantity, o.date, o.time, p.name, p.number
+#                           FROM operations o
+#                           JOIN products p ON o.product_id = p.id
+#                           ORDER BY o.date DESC, o.time DESC''')
+#         result = [
+#             {
+#                 "id": row[0],
+#                 "type": row[1],
+#                 "quantity": row[2],
+#                 "date": row[3],
+#                 "time": row[4],
+#                 "product_name": row[5],
+#                 "product_number": row[6]
+#             }
+#             for row in ops
+#         ]
+#         return jsonify(result)
+#     except Exception as e:
+#         print(f"Помилка get_all_operations: {e}")
+#         return jsonify([])
 
 
 

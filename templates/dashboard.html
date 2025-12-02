@@ -9,7 +9,6 @@
       transition: transform 0.2s, box-shadow 0.2s;
       border: none;
       border-radius: 15px;
-      cursor: pointer;
     }
     .dashboard-card:hover {
       transform: translateY(-5px);
@@ -30,6 +29,10 @@
     .recent-operations {
       max-height: 400px;
       overflow-y: auto;
+    }
+    .chart-container {
+      position: relative;
+      height: 250px;
     }
   </style>
 </head>
@@ -184,7 +187,7 @@
     </div>
 
     <!-- Статистика за період -->
-    <div class="row">
+    <div class="row mb-4">
       <div class="col-md-12">
         <div class="card">
           <div class="card-header bg-light">
@@ -215,9 +218,71 @@
         </div>
       </div>
     </div>
+
+    <!-- Графіки -->
+    <div class="row mb-4">
+      <!-- Графік операцій за 7 днів -->
+      <div class="col-md-6 mb-3">
+        <div class="card">
+          <div class="card-header bg-light">
+            <h5 class="mb-0">📊 Операції за останні 7 днів</h5>
+          </div>
+          <div class="card-body">
+            <div class="chart-container">
+              <canvas id="operationsChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Кругова діаграма типів операцій -->
+      <div class="col-md-6 mb-3">
+        <div class="card">
+          <div class="card-header bg-light">
+            <h5 class="mb-0">🥧 Співвідношення операцій (сьогодні)</h5>
+          </div>
+          <div class="card-body">
+            <div class="chart-container" id="operationsTypeContainer">
+              <canvas id="operationsTypeChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <!-- Топ-5 товарів за вартістю -->
+      <div class="col-md-6 mb-3">
+        <div class="card">
+          <div class="card-header bg-light">
+            <h5 class="mb-0">💎 Топ-5 товарів за вартістю залишків</h5>
+          </div>
+          <div class="card-body">
+            <div class="chart-container" id="topProductsContainer">
+              <canvas id="topProductsChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Розподіл товарів по складах -->
+      <div class="col-md-6 mb-3">
+        <div class="card">
+          <div class="card-header bg-light">
+            <h5 class="mb-0">🏢 Розподіл товарів по складах</h5>
+          </div>
+          <div class="card-body">
+            <div class="chart-container" id="warehouseContainer">
+              <canvas id="warehouseChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <script src="/static/dashboard.js"></script>
 
 </body>
