@@ -1,0 +1,57 @@
+    /* --- Sidebar, який виїжджає поверх --- */
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 250px;
+        height: 100vh;
+        background: #222;
+        color: white;
+        transform: translateX(-100%);
+        transition: 0.3s ease;
+        z-index: 1500;
+        padding-top: 40px;
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+    .sidebar ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .sidebar li {
+        padding: 15px 20px;
+        cursor: pointer;
+        font-size: 18px;
+    }
+
+    /* --- КНОПКА, ЩО РУХАЄТЬСЯ РАЗОМ З МЕНЮ --- */
+    .toggle-btn {
+        position: fixed;
+        top: 50%;
+        left: 0;
+        transform: translateY(-50%);
+        background: #444;
+        color: white;
+        border: none;
+        padding: 10px 14px;
+        cursor: pointer;
+        z-index: 2000;
+        border-radius: 0 6px 6px 0;
+        font-size: 20px;
+
+        /* тази магія — кнопка з'їжджає разом з меню */
+        transition: 0.3s ease;
+    }
+
+    .toggle-btn.open {
+        left: 250px; /* ширина меню */
+    }
+
+    .content {
+        padding: 20px;
+    }

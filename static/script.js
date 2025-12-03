@@ -257,3 +257,5 @@ window.addEventListener('load', function() {
   // Завантажуємо товари
   loadProducts();
 });
+
+
