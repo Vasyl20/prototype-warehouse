@@ -2,3 +2,4 @@ node_modules/
 venv/
 *.env
 warehouse.db
+__pycache__/

@@ -76,6 +76,7 @@ def login_required(f):
 
 # ============ АВТОРИЗАЦІЯ ============
 
+# Роут для сторінки входу в систему
 @app.route('/login')
 def login_page():
     if 'logged_in' in session:
@@ -83,6 +84,7 @@ def login_page():
     return render_template('login.html')
 
 
+#  API для входу в систему
 @app.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
@@ -96,7 +98,7 @@ def login():
     else:
         return jsonify({"error": "Невірний логін або пароль"}), 401
 
-
+# API для виходу з системи
 @app.route('/logout', methods=['POST'])
 def logout():
     session.clear()
@@ -121,6 +123,7 @@ def stock_page():
 @login_required
 def operations_page():
     return render_template('operations.html')
+
 
 
 # ============ ТОВАРИ ============
@@ -340,7 +343,6 @@ def add_outcome():
 @login_required
 def movement_page():
     return render_template('movement.html')
-
 
 # API для отримання ВСІХ операцій (для сторінки руху товарів)
 @app.route('/api/operations/all', methods=['GET'])
