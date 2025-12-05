@@ -4,3 +4,4 @@ venv/
 warehouse.db
 __pycache__/
 .vs
+.idea/

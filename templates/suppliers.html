@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Постачальники - Склад</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/static/menu.css" rel="stylesheet">
+  <style>
+    .supplier-card {
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+      border-radius: 10px;
+    }
+    .supplier-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+    }
+    .contact-info {
+      font-size: 0.9em;
+      color: #666;
+    }
+  </style>
+</head>
+<body class="p-4">
+
+  <!-- кнопка меню -->
+  <button class="toggle-btn" id="menuBtn" onclick="toggleSidebar()">☰</button>
+
+  <!-- панель -->
+  <div class="sidebar" id="sidebar">
+    <ul>
+        <li><span class="me-3">👤 Адміністратор</span></li>
+        <li><a href="/" class="btn btn-primary me-2">📦 Склад</a></li>
+        <li><a href="/suppliers" class="btn btn-success me-2">🏢 Постачальники</a></li>
+        <li><a href="/clients" class="btn btn-info me-2">👥 Клієнти</a></li>
+        <li><a href="/relocation" class="btn btn-primary me-2">🔁 Переміщення товарів</a></li>
+        <li><a href="/stock" class="btn btn-secondary me-2">📊 Залишки</a></li>
+        <li><a href="/movement" class="btn btn-warning me-2">📈 Рух товарів</a></li>
+        <li><a href="/operations" class="btn btn-info me-2">📋 Операції</a></li>
+        <li><a href="/dashboard" class="btn btn-success me-2">📊 Дашборд</a></li>
+        <li><a href="/movement" class="btn btn-secondary me-2">📈 Рух товарів</a></li>
+        <li><a href="/operations" class="btn btn-info me-2">♻️ Операції</a></li>
+        <li><button class="btn btn-danger" id="logoutBtn">🚪 Вийти</button></li>
+    </ul>
+</div>
+
+
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h3>🏢 Постачальники</h3>
+      <div>
+        <span class="me-3">👤 Адміністратор</span>
+        <a href="/static" class="btn btn-primary me-2">📦 Склад</a>
+        <a href="/operations" class="btn btn-info me-2">📋 Операції</a>
+        <button class="btn btn-success" id="addSupplierBtn">➕ Додати постачальника</button>
+      </div>
+    </div>
+
+    <!-- Пошук -->
+    <div class="mb-4">
+      <input type="text" id="searchInput" class="form-control" placeholder="🔍 Пошук постачальників за назвою, телефоном, email...">
+    </div>
+
+    <!-- Список постачальників -->
+    <div class="row" id="suppliersContainer">
+      <div class="col-12 text-center">
+        <p class="text-muted">Завантаження...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Модальне вікно додавання -->
+  <div class="modal fade" id="addModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header bg-success text-white">
+          <h5 class="modal-title">➕ Додати постачальника</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Назва компанії *</label>
+              <input id="addName" class="form-control" placeholder="ТОВ Постачальник">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Контактна особа</label>
+              <input id="addContactPerson" class="form-control" placeholder="Іванов Іван Іванович">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Телефон</label>
+              <input id="addPhone" class="form-control" placeholder="+380501234567">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Email</label>
+              <input id="addEmail" class="form-control" type="email" placeholder="info@supplier.com">
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Адреса</label>
+            <input id="addAddress" class="form-control" placeholder="Київ, вул. Хрещатик, 1">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Примітки</label>
+            <textarea id="addNotes" class="form-control" rows="3" placeholder="Додаткова інформація..."></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Скасувати</button>
+          <button type="button" class="btn btn-success" id="saveAddBtn">💾 Додати</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Модальне вікно редагування -->
+  <div class="modal fade" id="editModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header bg-warning">
+          <h5 class="modal-title">✏️ Редагувати постачальника</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <input id="editId" type="hidden">
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Назва компанії *</label>
+              <input id="editName" class="form-control">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Контактна особа</label>
+              <input id="editContactPerson" class="form-control">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Телефон</label>
+              <input id="editPhone" class="form-control">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Email</label>
+              <input id="editEmail" class="form-control" type="email">
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Адреса</label>
+            <input id="editAddress" class="form-control">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Примітки</label>
+            <textarea id="editNotes" class="form-control" rows="3"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Скасувати</button>
+          <button type="button" class="btn btn-warning" id="saveEditBtn">💾 Зберегти</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Модальне вікно перегляду історії -->
+  <div class="modal fade" id="historyModal" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header bg-info text-white">
+          <h5 class="modal-title">📋 Історія поставок</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <h6 id="historySupplierName" class="mb-3"></h6>
+          <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+              <thead class="table-light">
+                <tr>
+                  <th>Дата</th>
+                  <th>Час</th>
+                  <th>Товар</th>
+                  <th>Артикул</th>
+                  <th>Кількість</th>
+                  <th>Накладна</th>
+                </tr>
+              </thead>
+              <tbody id="historyTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/static/suppliers.js"></script>
+  <script src="/static/menu.js"></script>
+  <script src="/static/logout.js"></script>
+
+</body>
+</html>

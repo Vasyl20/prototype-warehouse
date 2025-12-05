@@ -44,9 +44,12 @@
 
   <!-- панель -->
   <div class="sidebar" id="sidebar">
-      <ul>
+    <ul>
+        <li><span class="me-3">👤 Адміністратор</span></li>
         <li><a href="/" class="btn btn-primary me-2">📦 Склад</a></li>
-        <li><a href="/relocation" class="btn btn-primary me-2">🔁 Переміщення</a></li>
+        <li><a href="/suppliers" class="btn btn-success me-2">🏢 Постачальники</a></li>
+        <li><a href="/clients" class="btn btn-info me-2">👥 Клієнти</a></li>
+        <li><a href="/relocation" class="btn btn-primary me-2">🔁 Переміщення товарів</a></li>
         <li><a href="/stock" class="btn btn-secondary me-2">📊 Залишки</a></li>
         <li><a href="/movement" class="btn btn-warning me-2">📈 Рух товарів</a></li>
         <li><a href="/operations" class="btn btn-info me-2">📋 Операції</a></li>
@@ -55,8 +58,8 @@
         <li><a href="/operations" class="btn btn-info me-2">♻️ Операції</a></li>
         <li><button class="btn btn-danger" id="logoutBtn">🚪 Вийти</button></li>
 
-      </ul>
-  </div>
+    </ul>
+</div>
 
   <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-4">
@@ -305,6 +308,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <script src="/static/dashboard.js"></script>
   <script src="/static/menu.js"></script>
+  <script src="/static/logout.js"></script>
 
 </body>
 </html>

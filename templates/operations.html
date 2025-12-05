@@ -4,26 +4,42 @@
   <meta charset="UTF-8">
   <title>Операції - Склад</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/static/menu.css" rel="stylesheet">
+  <link href="/static/menu.css" rel="stylesheet">
+  <style>
+    .new-product-fields {
+      background-color: #f8f9fa;
+      border: 2px dashed #28a745;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+    .product-type-selector {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+    .product-type-btn {
+      flex: 1;
+    }
+  </style>
 </head>
 <body class="p-4">
 
-    <!-- кнопка, яка рухається -->
   <button class="toggle-btn" id="menuBtn" onclick="toggleSidebar()">☰</button>
 
-  <!-- панель -->
   <div class="sidebar" id="sidebar">
-      <ul>
+    <ul>
+        <li><span class="me-3">👤 Адміністратор</span></li>
         <li><a href="/" class="btn btn-primary me-2">📦 Склад</a></li>
-        <li><a href="/relocation" class="btn btn-primary me-2">🔁 Переміщення</a></li>
+        <li><a href="/suppliers" class="btn btn-success me-2">🏢 Постачальники</a></li>
+        <li><a href="/clients" class="btn btn-info me-2">👥 Клієнти</a></li>
+        <li><a href="/relocation" class="btn btn-primary me-2">🔁 Переміщення товарів</a></li>
         <li><a href="/stock" class="btn btn-secondary me-2">📊 Залишки</a></li>
         <li><a href="/movement" class="btn btn-warning me-2">📈 Рух товарів</a></li>
         <li><a href="/operations" class="btn btn-info me-2">📋 Операції</a></li>
         <li><a href="/dashboard" class="btn btn-success me-2">📊 Дашборд</a></li>
-        <li><a href="/movement" class="btn btn-secondary me-2">📈 Рух товарів</a></li>
-        <li><a href="/operations" class="btn btn-info me-2">♻️ Операції</a></li>
         <li><button class="btn btn-danger" id="logoutBtn">🚪 Вийти</button></li>
-      </ul>
+    </ul>
   </div>
 
   <div class="container">
@@ -32,8 +48,9 @@
       <div>
         <span class="me-3">👤 Адміністратор</span>
         <a href="/" class="btn btn-primary me-2">📦 До складу</a>
+        <a href="/suppliers" class="btn btn-success me-2">🏢 Постачальники</a>
+        <a href="/clients" class="btn btn-info me-2">👥 Клієнти</a>
         <a href="/stock" class="btn btn-warning me-2">📊 Залишки</a>
-        <button class="btn btn-danger" id="logoutBtn">🚪 Вийти</button>
       </div>
     </div>
 
@@ -46,19 +63,77 @@
           </div>
           <div class="card-body">
             <div class="mb-3">
-              <label class="form-label">Дата</label>
+              <label class="form-label">Дата *</label>
               <input type="date" id="incomeDate" class="form-control">
             </div>
+
             <div class="mb-3">
-              <label class="form-label">Товар</label>
-              <select id="incomeProduct" class="form-select">
-                <option value="">Виберіть товар...</option>
+              <label class="form-label">Постачальник *</label>
+              <select id="incomeSupplier" class="form-select">
+                <option value="">Виберіть постачальника...</option>
               </select>
             </div>
+
+            <!-- Вибір типу товару -->
             <div class="mb-3">
-              <label class="form-label">Кількість</label>
+              <label class="form-label">Товар *</label>
+              <div class="product-type-selector">
+                <button type="button" class="btn btn-outline-primary product-type-btn" id="existingProductBtn" onclick="showExistingProduct()">
+                  📋 Вибрати існуючий
+                </button>
+                <button type="button" class="btn btn-outline-success product-type-btn" id="newProductBtn" onclick="showNewProduct()">
+                  ➕ Новий товар
+                </button>
+              </div>
+
+              <!-- Вибір існуючого товару -->
+              <div id="existingProductSection">
+                <select id="incomeProduct" class="form-select">
+                  <option value="">Виберіть товар зі складу...</option>
+                </select>
+              </div>
+
+              <!-- Форма для нового товару -->
+              <div id="newProductSection" style="display: none;" class="new-product-fields">
+                <div class="mb-3">
+                  <label class="form-label">Назва товару *</label>
+                  <input type="text" id="newProductName" class="form-control" placeholder="Наприклад: Ноутбук Dell Latitude">
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Артикул/Номер</label>
+                  <input type="text" id="newProductNumber" class="form-control" placeholder="ART-1234">
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Ціна (за одиницю)</label>
+                  <input type="number" id="newProductPrice" class="form-control" placeholder="0.00" step="0.01">
+                </div>
+                <div class="row">
+                  <div class="col-md-4 mb-3">
+                    <label class="form-label">Склад *</label>
+                    <input type="text" id="newProductWarehouse" class="form-control" placeholder="1">
+                  </div>
+                  <div class="col-md-4 mb-3">
+                    <label class="form-label">Стелаж *</label>
+                    <input type="text" id="newProductShelf" class="form-control" placeholder="A">
+                  </div>
+                  <div class="col-md-4 mb-3">
+                    <label class="form-label">Полиця *</label>
+                    <input type="text" id="newProductRack" class="form-control" placeholder="1">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Кількість *</label>
               <input type="number" id="incomeQty" class="form-control" placeholder="Кількість" min="1">
             </div>
+
+            <div class="mb-3">
+              <label class="form-label">Номер накладної</label>
+              <input type="text" id="incomeInvoice" class="form-control" placeholder="ПН-1234">
+            </div>
+
             <button class="btn btn-success w-100" id="addIncomeBtn">➕ Додати надходження</button>
           </div>
         </div>
@@ -72,18 +147,28 @@
           </div>
           <div class="card-body">
             <div class="mb-3">
-              <label class="form-label">Дата</label>
+              <label class="form-label">Дата *</label>
               <input type="date" id="outcomeDate" class="form-control">
             </div>
             <div class="mb-3">
-              <label class="form-label">Товар</label>
+              <label class="form-label">Клієнт *</label>
+              <select id="outcomeClient" class="form-select">
+                <option value="">Виберіть клієнта...</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Товар *</label>
               <select id="outcomeProduct" class="form-select">
                 <option value="">Виберіть товар...</option>
               </select>
             </div>
             <div class="mb-3">
-              <label class="form-label">Кількість</label>
+              <label class="form-label">Кількість *</label>
               <input type="number" id="outcomeQty" class="form-control" placeholder="Кількість" min="1">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Номер накладної</label>
+              <input type="text" id="outcomeInvoice" class="form-control" placeholder="ВН-1234">
             </div>
             <button class="btn btn-warning w-100" id="addOutcomeBtn">➖ Відпустити товар</button>
           </div>
@@ -97,25 +182,402 @@
         <h5 class="mb-0">📋 Історія операцій (останні 20)</h5>
       </div>
       <div class="card-body">
-        <table class="table table-bordered">
-          <thead>
-            <tr>
-              <th>Дата</th>
-              <th>Час</th>
-              <th>Тип</th>
-              <th>Товар</th>
-              <th>Кількість</th>
-            </tr>
-          </thead>
-          <tbody id="operationsTable"></tbody>
-        </table>
+        <div class="table-responsive">
+          <table class="table table-bordered table-hover">
+            <thead>
+              <tr>
+                <th>Дата</th>
+                <th>Час</th>
+                <th>Тип</th>
+                <th>Товар</th>
+                <th>Кількість</th>
+                <th>Контрагент / Накладна</th>
+              </tr>
+            </thead>
+            <tbody id="operationsTable"></tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="/static/operations.js"></script>
   <script src="/static/menu.js"></script>
+  <script src="/static/logout.js"></script>
+
+  <script>
+    let productsData = [];
+    let operationsData = [];
+    let suppliersData = [];
+    let clientsData = [];
+    let isNewProduct = false;
+
+    // Перемикання між існуючим та новим товаром
+    function showExistingProduct() {
+      isNewProduct = false;
+      document.getElementById('existingProductSection').style.display = 'block';
+      document.getElementById('newProductSection').style.display = 'none';
+      document.getElementById('existingProductBtn').classList.remove('btn-outline-primary');
+      document.getElementById('existingProductBtn').classList.add('btn-primary');
+      document.getElementById('newProductBtn').classList.remove('btn-success');
+      document.getElementById('newProductBtn').classList.add('btn-outline-success');
+    }
+
+    function showNewProduct() {
+      isNewProduct = true;
+      document.getElementById('existingProductSection').style.display = 'none';
+      document.getElementById('newProductSection').style.display = 'block';
+      document.getElementById('newProductBtn').classList.remove('btn-outline-success');
+      document.getElementById('newProductBtn').classList.add('btn-success');
+      document.getElementById('existingProductBtn').classList.remove('btn-primary');
+      document.getElementById('existingProductBtn').classList.add('btn-outline-primary');
+    }
+
+    // Завантаження товарів
+    async function loadProducts() {
+      try {
+        const res = await fetch('/products');
+        productsData = await res.json();
+        populateProductSelects();
+      } catch (error) {
+        console.error('Помилка завантаження товарів:', error);
+      }
+    }
+
+    // Завантаження постачальників
+    async function loadSuppliers() {
+      try {
+        const res = await fetch('/api/suppliers');
+        suppliersData = await res.json();
+        populateSupplierSelect();
+      } catch (error) {
+        console.error('Помилка завантаження постачальників:', error);
+      }
+    }
+
+    // Завантаження клієнтів
+    async function loadClients() {
+      try {
+        const res = await fetch('/api/clients');
+        clientsData = await res.json();
+        populateClientSelect();
+      } catch (error) {
+        console.error('Помилка завантаження клієнтів:', error);
+      }
+    }
+
+    // Завантаження операцій
+    async function loadOperations() {
+      try {
+        const res = await fetch('/api/operations');
+        if (!res.ok) {
+          operationsData = [];
+          renderOperationsTable();
+          return;
+        }
+        operationsData = await res.json();
+        renderOperationsTable();
+      } catch (error) {
+        console.error('Помилка завантаження операцій:', error);
+        operationsData = [];
+        renderOperationsTable();
+      }
+    }
+
+    // Заповнення випадаючих списків товарами
+    function populateProductSelects() {
+      const incomeSelect = document.getElementById('incomeProduct');
+      const outcomeSelect = document.getElementById('outcomeProduct');
+
+      incomeSelect.innerHTML = '<option value="">Виберіть товар зі складу...</option>';
+      outcomeSelect.innerHTML = '<option value="">Виберіть товар...</option>';
+
+      productsData.forEach(p => {
+        const displayText = `${p.name} ${p.number ? '| №' + p.number : ''} | Залишок: ${p.quantity || 0}`;
+
+        const option1 = document.createElement('option');
+        option1.value = p.id;
+        option1.textContent = displayText;
+
+        const option2 = document.createElement('option');
+        option2.value = p.id;
+        option2.textContent = displayText;
+
+        incomeSelect.appendChild(option1);
+        outcomeSelect.appendChild(option2);
+      });
+    }
+
+    // Заповнення списку постачальників
+    function populateSupplierSelect() {
+      const select = document.getElementById('incomeSupplier');
+      select.innerHTML = '<option value="">Виберіть постачальника...</option>';
+
+      suppliersData.forEach(s => {
+        const option = document.createElement('option');
+        option.value = s.id;
+        option.textContent = `${s.name} ${s.contact_person ? '(' + s.contact_person + ')' : ''}`;
+        select.appendChild(option);
+      });
+    }
+
+    // Заповнення списку клієнтів
+    function populateClientSelect() {
+      const select = document.getElementById('outcomeClient');
+      select.innerHTML = '<option value="">Виберіть клієнта...</option>';
+
+      clientsData.forEach(c => {
+        const option = document.createElement('option');
+        option.value = c.id;
+        option.textContent = `${c.name} ${c.contact_person ? '(' + c.contact_person + ')' : ''}`;
+        select.appendChild(option);
+      });
+    }
+
+    // Відображення таблиці операцій
+    function renderOperationsTable() {
+      const table = document.getElementById('operationsTable');
+      table.innerHTML = '';
+
+      if (operationsData.length === 0) {
+        table.innerHTML = '<tr><td colspan="6" class="text-center text-muted">Операцій поки немає</td></tr>';
+        return;
+      }
+
+      operationsData.forEach(op => {
+        const row = document.createElement('tr');
+        const typeClass = op.type === 'income' ? 'text-success' : 'text-warning';
+        const typeText = op.type === 'income' ? '➕ Надходження' : '➖ Відпуск';
+
+        const productDisplay = op.product_number
+          ? `${op.product_name} | №${op.product_number}`
+          : op.product_name;
+
+        let counterparty = '—';
+        if (op.type === 'income' && op.supplier_name) {
+          counterparty = `📦 ${op.supplier_name}`;
+        } else if (op.type === 'outcome' && op.client_name) {
+          counterparty = `👤 ${op.client_name}`;
+        }
+
+        const invoice = op.invoice_number ? `📄 ${op.invoice_number}` : '—';
+
+        row.innerHTML = `
+          <td>${op.date}</td>
+          <td>${op.time}</td>
+          <td class="${typeClass}"><strong>${typeText}</strong></td>
+          <td>${productDisplay}</td>
+          <td>${op.quantity}</td>
+          <td><small>${counterparty}<br>${invoice}</small></td>
+        `;
+
+        table.appendChild(row);
+      });
+    }
+
+    // Додавання надходження (ОНОВЛЕНА ЛОГІКА)
+    async function addIncome() {
+      const quantity = parseInt(document.getElementById('incomeQty').value);
+      const date = document.getElementById('incomeDate').value;
+      const supplierId = document.getElementById('incomeSupplier').value;
+      const invoiceNumber = document.getElementById('incomeInvoice').value.trim();
+
+      if (!quantity || quantity <= 0) {
+        alert('Введіть коректну кількість!');
+        return;
+      }
+
+      if (!date) {
+        alert('Виберіть дату!');
+        return;
+      }
+
+      if (!supplierId) {
+        alert('Виберіть постачальника!');
+        return;
+      }
+
+      let requestData;
+
+      if (isNewProduct) {
+        // Новий товар
+        const name = document.getElementById('newProductName').value.trim();
+        const number = document.getElementById('newProductNumber').value.trim();
+        const price = parseFloat(document.getElementById('newProductPrice').value) || 0;
+        const warehouse = document.getElementById('newProductWarehouse').value.trim();
+        const shelf = document.getElementById('newProductShelf').value.trim();
+        const rack = document.getElementById('newProductRack').value.trim();
+
+        if (!name || !warehouse || !shelf || !rack) {
+          alert('Заповніть всі обов\'язкові поля для нового товару!');
+          return;
+        }
+
+        requestData = {
+          is_new_product: true,
+          product_name: name,
+          product_number: number,
+          product_price: price,
+          warehouse_number: warehouse,
+          shelf: shelf,
+          rack: rack,
+          quantity: quantity,
+          date: date,
+          supplier_id: supplierId,
+          invoice_number: invoiceNumber
+        };
+      } else {
+        // Існуючий товар
+        const productId = document.getElementById('incomeProduct').value;
+
+        if (!productId) {
+          alert('Виберіть товар!');
+          return;
+        }
+
+        requestData = {
+          is_new_product: false,
+          product_id: productId,
+          quantity: quantity,
+          date: date,
+          supplier_id: supplierId,
+          invoice_number: invoiceNumber
+        };
+      }
+
+      try {
+        const res = await fetch('/operations/income', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(requestData)
+        });
+
+        if (res.ok) {
+          alert('✅ Надходження успішно додано!');
+          // Очищуємо форму
+          document.getElementById('incomeQty').value = '';
+          document.getElementById('incomeProduct').value = '';
+          document.getElementById('incomeSupplier').value = '';
+          document.getElementById('incomeInvoice').value = '';
+          document.getElementById('newProductName').value = '';
+          document.getElementById('newProductNumber').value = '';
+          document.getElementById('newProductPrice').value = '';
+          document.getElementById('newProductWarehouse').value = '';
+          document.getElementById('newProductShelf').value = '';
+          document.getElementById('newProductRack').value = '';
+          setTodayDate();
+          showExistingProduct(); // Повертаємо на вибір існуючого
+          await loadProducts();
+          await loadOperations();
+        } else {
+          const err = await res.json();
+          alert('❌ Помилка: ' + err.error);
+        }
+      } catch (error) {
+        console.error('Помилка:', error);
+        alert('Помилка додавання надходження!');
+      }
+    }
+
+    // Додавання відпуску (без змін)
+    async function addOutcome() {
+      const productId = document.getElementById('outcomeProduct').value;
+      const quantity = parseInt(document.getElementById('outcomeQty').value);
+      const date = document.getElementById('outcomeDate').value;
+      const clientId = document.getElementById('outcomeClient').value;
+      const invoiceNumber = document.getElementById('outcomeInvoice').value.trim();
+
+      if (!productId) {
+        alert('Виберіть товар!');
+        return;
+      }
+
+      if (!quantity || quantity <= 0) {
+        alert('Введіть коректну кількість!');
+        return;
+      }
+
+      if (!date) {
+        alert('Виберіть дату!');
+        return;
+      }
+
+      if (!clientId) {
+        alert('Виберіть клієнта!');
+        return;
+      }
+
+      const product = productsData.find(p => p.id == productId);
+      if (!product || product.quantity < quantity) {
+        alert(`❌ Недостатньо товару на складі! Доступно: ${product?.quantity || 0}`);
+        return;
+      }
+
+      try {
+        const res = await fetch('/operations/outcome', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            product_id: productId,
+            quantity,
+            date,
+            client_id: clientId,
+            invoice_number: invoiceNumber
+          })
+        });
+
+        if (res.ok) {
+          alert('✅ Відпуск успішно виконано!');
+          document.getElementById('outcomeQty').value = '';
+          document.getElementById('outcomeProduct').value = '';
+          document.getElementById('outcomeClient').value = '';
+          document.getElementById('outcomeInvoice').value = '';
+          setTodayDate();
+          await loadProducts();
+          await loadOperations();
+        } else {
+          const err = await res.json();
+          alert('❌ Помилка: ' + err.error);
+        }
+      } catch (error) {
+        console.error('Помилка:', error);
+        alert('Помилка виконання відпуску!');
+      }
+    }
+
+    // Вихід з системи
+    async function logout() {
+      try {
+        await fetch('/logout', { method: 'POST' });
+        window.location.href = '/login';
+      } catch (error) {
+        console.error('Помилка виходу:', error);
+        window.location.href = '/login';
+      }
+    }
+
+    // Встановлення сьогоднішньої дати
+    function setTodayDate() {
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('incomeDate').value = today;
+      document.getElementById('outcomeDate').value = today;
+    }
+
+    // Ініціалізація
+    window.addEventListener('load', function() {
+      setTodayDate();
+      showExistingProduct(); // За замовчуванням показуємо існуючі товари
+
+      document.getElementById('addIncomeBtn').addEventListener('click', addIncome);
+      document.getElementById('addOutcomeBtn').addEventListener('click', addOutcome);
+      document.getElementById('logoutBtn').addEventListener('click', logout);
+
+      loadProducts();
+      loadSuppliers();
+      loadClients();
+      loadOperations();
+    });
+  </script>
 
 </body>
 </html>
