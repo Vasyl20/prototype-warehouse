@@ -1,0 +1,5 @@
+mkdir -p .github/workflows
+# Додайте файл ci.yml в цю папку
+git add .github/
+git commit -m "Add CI/CD pipeline"
+git push

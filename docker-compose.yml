@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  warehouse:
+    build: .
+    container_name: warehouse_app
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./data:/app/data
+      - ./app.py:/app/app.py
+      - ./static:/app/static
+      - ./templates:/app/templates
+    environment:
+      - FLASK_ENV=development
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped
+    networks:
+      - warehouse_network
+
+  nginx:
+    image: nginx:alpine
+    container_name: warehouse_nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./static:/app/static:ro
+    depends_on:
+      - warehouse
+    networks:
+      - warehouse_network
+    restart: unless-stopped
+
+networks:
+  warehouse_network:
+    driver: bridge
