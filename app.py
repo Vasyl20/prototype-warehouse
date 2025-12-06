@@ -1336,6 +1336,7 @@ def add_income():
                       (product_name, product_number, quantity, product_price,
                        warehouse_number, shelf, rack))
 
+
             product_id = c.lastrowid
             print(f"✅ Створено новий товар ID={product_id}")
 
