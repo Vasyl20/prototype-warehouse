@@ -258,7 +258,7 @@ def init_db():
                  )
         )''')
 
-    print("✅ Всі таблиці створено/перевірено")
+    print("Всі таблиці створено/перевірено")
 
     conn.commit()
     conn.close()
@@ -276,7 +276,7 @@ def add_sample_data():
         conn.close()
         return
 
-    print("📦 Додавання тестових даних...")
+    print("Додавання тестових даних...")
 
     import random
     from datetime import datetime, timedelta
@@ -302,7 +302,7 @@ def add_sample_data():
                   (*supplier, datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
         supplier_ids.append(c.lastrowid)
 
-    print(f"✅ Додано {len(supplier_ids)} постачальників")
+    print(f"Додано {len(supplier_ids)} постачальників")
 
     # === КЛІЄНТИ ===
     clients_data = [
@@ -326,7 +326,7 @@ def add_sample_data():
                   (*client, datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
         client_ids.append(c.lastrowid)
 
-    print(f"✅ Додано {len(client_ids)} клієнтів")
+    print(f"Додано {len(client_ids)} клієнтів")
 
     # === ТОВАРИ ===
     product_names = [
@@ -373,7 +373,7 @@ def add_sample_data():
 
         product_ids.append(c.lastrowid)
 
-    print(f"✅ Додано {len(product_ids)} товарів")
+    print(f"Додано {len(product_ids)} товарів")
 
     # === ОПЕРАЦІЇ З ПРИВ'ЯЗКОЮ ДО ПОСТАЧАЛЬНИКІВ/КЛІЄНТІВ ===
     for product_id in product_ids:
@@ -411,7 +411,7 @@ def add_sample_data():
                          VALUES (?, ?, ?, ?, ?, ?, ?)''',
                       (product_id, 'outcome', qty, date_str, time_str, client_id, invoice_num))
 
-    print("✅ Додано операції з прив'язкою до постачальників/клієнтів")
+    print("Додано операції з прив'язкою до постачальників/клієнтів")
 
     # === ПЕРЕМІЩЕННЯ ===
     for i in range(3):
@@ -436,12 +436,12 @@ def add_sample_data():
                   (product_id, from_loc[0], from_loc[1], from_loc[2],
                    to_loc[0], to_loc[1], to_loc[2], date_str, time_str))
 
-    print("✅ Додано історію переміщень")
+    print("Додано історію переміщень")
 
     conn.commit()
     conn.close()
 
-    print("\n🎉 Тестові дані успішно додано!")
+    print("\nТестові дані успішно додано!")
     print(f"""
 📊 Підсумок:
    • Постачальників: {len(supplier_ids)}
@@ -1338,7 +1338,7 @@ def add_income():
 
 
             product_id = c.lastrowid
-            print(f"✅ Створено новий товар ID={product_id}")
+            print(f"Створено новий товар ID={product_id}")
 
         else:
             # === ДОДАЄМО ДО ІСНУЮЧОГО ТОВАРУ ===
@@ -1385,9 +1385,9 @@ if __name__ == '__main__':
     db_exists = os.path.exists(DB_NAME)
 
     if not db_exists:
-        print("🔧 База даних не знайдена, створюємо нову...")
+        print("База даних не знайдена, створюємо нову")
         init_db()
-        print("✅ База даних створена!")
+        print("База даних створена!")
 
         # Автоматично додаємо тестові дані
         add_sample_data()
@@ -1395,6 +1395,6 @@ if __name__ == '__main__':
         # Якщо база існує, просто перевіряємо структуру таблиць
         init_db()
 
-    print("🚀 Flask запущено! Відкрий у браузері: http://127.0.0.1:5000")
-    print("🔐 Логін: адмін / Пароль: адмін")
+    print("Flask запущено! Відкрий у браузері: http://127.0.0.1:5000")
+    print("Логін: адмін / Пароль: адмін")
     app.run(host='0.0.0.0', port=5000, debug=True)
